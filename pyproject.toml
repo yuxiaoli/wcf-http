@@ -1,16 +1,16 @@
 [tool.poetry]
 name = "wcf-http-server"
-version = "39.2.4.0.4"
+version = "39.2.4.0.7"
 description = "一个玩微信的工具"
 authors = ["sean <sean.li@vectorindex.cloud>"]
 readme = "README.md"
 packages = [{include = "wcf_http", from = "src"}]
 
 [tool.poetry.dependencies]
-python = "^3.11"
+python = "^3.10"
 wcferry = "~39.2.4"
-uvicorn = "^0.32.0"
-fastapi = "^0.115.5"
+uvicorn = "^0.23.2"#"^0.32.0"
+fastapi = "^0.103.2"#"^0.115.5"
 
 
 [build-system]
