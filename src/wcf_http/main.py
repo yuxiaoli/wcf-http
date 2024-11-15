@@ -3,6 +3,7 @@
 
 import logging
 import argparse
+import os
 
 import uvicorn
 from wcferry import Wcf
@@ -29,7 +30,7 @@ def main():
 
     # Create the log directory as a quick fix for https://github.com/lich0821/WeChatRobot/issues/70
     # Fixed in https://github.com/lich0821/WeChatFerry/commit/19079bc468fe6681a65887a42a9215a9ec7392d1
-    log_dir = os.path.join(os.path.dirname(__file__), 'logs')
+    log_dir = os.path.join(os.getcwd(), 'logs')
     os.makedirs(log_dir)
 
     wcf = Wcf(args.wcf_host, args.wcf_port, args.wcf_debug)
