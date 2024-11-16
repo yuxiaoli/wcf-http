@@ -7,15 +7,20 @@
 
 Python HTTP server for [WeChatFerry](https://github.com/lich0821/WeChatFerry) [v39.2.4](https://github.com/lich0821/WeChatFerry/releases/tag/v39.2.4)，适配微信 3.9.10.27 [WeChatSetup-3.9.10.27.exe](https://github.com/lich0821/WeChatFerry/releases/download/v39.2.4/WeChatSetup-3.9.10.27.exe)
 
-## Installation
+## 安装
 
 ```sh
+# 创建虚拟环境
+python -m venv venv
+
+# 激活虚拟环境 (Windows)
+venv\Scripts\activate
+
+# 安装依赖
 pip install -U wcf-http-server
 ```
 
-Note: Recommend to use virtualenv
-
-## Run
+## 运行
 
 ```sh
 # 查看版本
