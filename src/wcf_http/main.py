@@ -34,25 +34,29 @@ def main():
     os.makedirs(log_dir, exist_ok=True)
 
     wcf = Wcf(args.wcf_host, args.wcf_port, args.wcf_debug)
-    home = "https://github.com/lich0821/WeChatFerry"
+    # home = "https://github.com/lich0821/WeChatFerry"
+    github = "https://github.com/yuxiaoli/wcf-http"
+    pypi = "https://pypi.org/project/wcf-http-server/"
     qrcodes = """<table>
 <thead>
 <tr>
-<th style="text-align:center"><img src="https://s2.loli.net/2023/09/25/fub5VAPSa8srwyM.jpg" alt="碲矿"></th>
-<th style="text-align:center"><img src="https://s2.loli.net/2023/09/25/gkh9uWZVOxzNPAX.jpg" alt="赞赏"></th>
+<!-- <th style="text-align:center"><img src="https://s2.loli.net/2023/09/25/fub5VAPSa8srwyM.jpg" alt="碲矿"></th> -->
+<!-- <th style="text-align:center"><img src="https://s2.loli.net/2023/09/25/gkh9uWZVOxzNPAX.jpg" alt="赞赏"></th> -->
+<th style="text-align:center"><img src="https://api.codetabs.com/v1/proxy/?quest=https://mmbiz.qpic.cn/sz_mmbiz_png/NqSD0p9cbmiauQkiaVZOgmxF2KVTVMsxExocdAscXfqUKSicbBy6kPyQDToeCPwUbqgrSBWr5l8TnaxIwDgwBW7JA/640?wx_fmt=png&from=appmsg" alt="图灵信使"></th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td style="text-align:center">后台回复 <code>WeChatFerry</code> 加群交流</td>
-<td style="text-align:center">如果你觉得有用</td>
-</tr>
+<td style="text-align:center">
+后台回复 <code>wcf-http</code> 加群交流
+<!-- <br />如果你觉得有用 -->
+</td>
 </tbody>
 </table>"""
     http = Http(wcf=wcf,
                 cb=cb,
                 title="WeChatFerry HTTP 客户端",
-                description=f"Github: <a href='{home}'>WeChatFerry</a>{qrcodes}",)
+                description=f"GitHub: <a href='{github}'>wcf-http</a> | PyPI: <a href='{pypi}'>wcf-http-server</a>{qrcodes}",)
 
     uvicorn.run(app=http, host=args.host, port=args.port)
 
