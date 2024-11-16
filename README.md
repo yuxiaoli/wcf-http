@@ -5,7 +5,11 @@
 - GitHub: [https://github.com/yuxiaoli/wcf-http](https://github.com/yuxiaoli/wcf-http)
 - PyPI: [https://pypi.org/project/wcf-http-server/](https://pypi.org/project/wcf-http-server/)
 
-Python HTTP server for [WeChatFerry](https://github.com/lich0821/WeChatFerry) [v39.2.4](https://github.com/lich0821/WeChatFerry/releases/tag/v39.2.4)，适配微信 3.9.10.27 [WeChatSetup-3.9.10.27.exe](https://github.com/lich0821/WeChatFerry/releases/download/v39.2.4/WeChatSetup-3.9.10.27.exe)
+Python HTTP server for [WeChatFerry](https://github.com/lich0821/WeChatFerry) [v39.3.3](https://github.com/lich0821/WeChatFerry/releases/tag/v39.3.3)，适配微信 3.9.11.25 [WeChatSetup-3.9.11.25.exe](https://github.com/lich0821/WeChatFerry/releases/download/v39.3.3/WeChatSetup-3.9.11.25.exe)
+
+## 已知问题
+1. (发送文件后，微信崩溃。)[https://github.com/lich0821/WeChatFerry/issues/269] 文件路径不支持中文
+2. 发送富文本消息失败
 
 ## 安装
 
