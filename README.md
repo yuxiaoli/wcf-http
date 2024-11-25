@@ -21,36 +21,37 @@ python -m venv venv
 venv\Scripts\activate
 
 # 安装依赖
-pip install -U wcf-http-server
+pip install -r requirements.txt
 ```
 
 ## 运行
 
 ```sh
 # 查看版本
-wcfhttp -v
+python src\wcf_http\main.py -v
 
 # 查看帮助
-wcfhttp -h
+python src\wcf_http\main.py -h
 
-usage: wcfhttp [-h] [-v] [--wcf_host WCF_HOST] [--wcf_port WCF_PORT]
-               [--wcf_debug WCF_DEBUG] [--host HOST] [--port PORT] [--cb CB]
+usage: main.py [-h] [-v] [--wcf_host WCF_HOST] [--wcf_port WCF_PORT] [--wcf_debug WCF_DEBUG] [--host HOST]
+               [--port PORT] [--cb CB]
 
 options:
   -h, --help            show this help message and exit
   -v, --version         show program's version number and exit
   --wcf_host WCF_HOST   WeChatFerry 监听地址，默认本地启动监听 0.0.0.0
   --wcf_port WCF_PORT   WeChatFerry 监听端口 (同时占用 port + 1 端口)，默认 10086
-  --wcf_debug WCF_DEBUG 是否打开 WeChatFerry 调试开关
+  --wcf_debug WCF_DEBUG
+                        是否打开 WeChatFerry 调试开关
   --host HOST           wcfhttp 监听地址，默认监听 0.0.0.0
   --port PORT           wcfhttp 监听端口，默认 9999
   --cb CB               接收消息回调地址
 
 # 忽略新消息运行
-wcfhttp
+python src\wcf_http\main.py
 
 # 新消息转发到指定地址
-wcfhttp --cb http://host:port/callback
+python src\wcf_http\main.py --cb http://host:port/callback
 ```
 
 ## 接收消息回调接口文档

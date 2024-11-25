@@ -11,7 +11,16 @@ python = "^3.10"
 wcferry = "~39.2.4"
 uvicorn = "^0.23.2"#"^0.32.0"
 fastapi = "^0.103.2"#"^0.115.5"
+pystray = { version = "^0.19.5", optional = true }
+pillow = { version = "^11.0.0", optional = true }
 
+# https://python-poetry.org/docs/pyproject/#extras
+[tool.poetry.extras]
+systray = ["pystray", "pillow"]
+
+
+[tool.poetry.group.dev.dependencies]
+pynsist = "^2.8"
 
 [build-system]
 requires = ["poetry-core"]
