@@ -82,7 +82,7 @@ class Http(FastAPI):
         self.add_api_route("/callback", self.get_callback, methods=["GET"], summary="Get the callback URL", tags=["Callback"])
         self.add_api_route("/callback", self.set_callback, methods=["POST"], summary="Set the callback URL", tags=["Callback"])
 
-    def _forward_msg(self, msg: WxMsg, cb: str):
+    def _forward_msg(self, msg: WxMsg):
         data = {}
         data["id"] = msg.id
         data["ts"] = msg.ts
@@ -99,7 +99,7 @@ class Http(FastAPI):
         data["is_group"] = msg.from_group()
 
         try:
-            rsp = requests.post(url=cb, json=data, timeout=30)
+            rsp = requests.post(url=self.cb, json=data, timeout=30)
             if rsp.status_code != 200:
                 self.LOG.error(f"消息转发失败，HTTP 状态码为: {rsp.status_code}")
         except Exception as e:
