@@ -39,6 +39,7 @@ class Http(FastAPI):
         self.LOG = logging.getLogger(__name__)
         self.LOG.info(f"wcfhttp version: {__version__}")
         self.wcf = wcf
+        self.cb = cb  # Store the callback URL
         self._set_cb(cb)
 
         # GET Routes
@@ -68,7 +69,7 @@ class Http(FastAPI):
         self.add_api_route("/new-friend", self.accept_new_friend, methods=["POST"], summary="通过好友申请")
         self.add_api_route("/chatroom-member", self.add_chatroom_members, methods=["POST"], summary="添加群成员")
         self.add_api_route("/cr-members", self.invite_chatroom_members, methods=["POST"], summary="邀请群成员")
-        self.add_api_route("/transfer", self.receive_transfer, methods=["POST"], summary="接收转账")
+        # self.add_api_route("/transfer", self.receive_transfer, methods=["POST"], summary="接收转账")
         self.add_api_route("/dec-image", self.decrypt_image, methods=["POST"], summary="（废弃）解密图片")
         self.add_api_route("/attachment", self.download_attachment, methods=["POST"], summary="（废弃）下载图片、文件和视频")
         self.add_api_route("/save-image", self.download_image, methods=["POST"], summary="下载图片")
@@ -76,6 +77,10 @@ class Http(FastAPI):
 
         # DELETE Routes
         self.add_api_route("/chatroom-member", self.del_chatroom_members, methods=["DELETE"], summary="删除群成员")
+
+        # Add routes for dynamic callback URL handling
+        self.add_api_route("/callback", self.get_callback, methods=["GET"], summary="Get the callback URL", tags=["Callback"])
+        self.add_api_route("/callback", self.set_callback, methods=["POST"], summary="Set the callback URL", tags=["Callback"])
 
     def _forward_msg(self, msg: WxMsg, cb: str):
         data = {}
@@ -101,24 +106,36 @@ class Http(FastAPI):
             self.LOG.error(f"消息转发异常: {e}")
 
     def _set_cb(self, cb: str):
-        def callback(wcf: Wcf):
-            while wcf.is_receiving_msg():
-                try:
-                    msg = wcf.get_msg()
-                    self.LOG.info(msg)
-                    self._forward_msg(msg, cb)
-                except Empty:
-                    continue  # Empty message
-                except Exception as e:
-                    self.LOG.error(f"Receiving message error: {e}")
+        self.cb = cb
+        self.LOG.info(f"消息回调: {cb}" if cb else "没有设置回调，打印消息")
+        self.wcf.enable_receiving_msg(pyq=True)  # 同时允许接收朋友圈消息
 
-        if cb:
-            self.LOG.info(f"消息回调: {cb}")
-            self.wcf.enable_receiving_msg(pyq=True)  # 同时允许接收朋友圈消息
-            Thread(target=callback, name="GetMessage", args=(self.wcf,), daemon=True).start()
-        else:
-            self.LOG.info(f"没有设置回调，打印消息")
-            self.wcf.enable_recv_msg(print)
+        # Start the message receiving thread only if not already started
+        if not hasattr(self, '_message_thread'):
+            def callback(wcf: Wcf):
+                while wcf.is_receiving_msg():
+                    try:
+                        msg = wcf.get_msg()
+                        if self.cb:
+                            self.LOG.info(f"收到消息，转发至回调：{msg}")
+                            self._forward_msg(msg)
+                        else:
+                            print(f"收到消息：{msg}")
+                    except Empty:
+                        continue  # Empty message
+                    except Exception as e:
+                        self.LOG.error(f"Receiving message error: {e}")
+            self._message_thread = Thread(target=callback, name="GetMessage", args=(self.wcf,), daemon=True)
+            self._message_thread.start()
+
+    def get_callback(self):
+        """Get the current callback URL."""
+        return {"callback": self.cb}
+
+    def set_callback(self, callback: str = Body(..., embed=True)):
+        """Set a new callback URL."""
+        self._set_cb(callback)
+        return {"message": "Callback URL updated successfully", "callback": self.cb}
 
     def is_login(self) -> dict:
         """获取登录状态"""
