@@ -79,7 +79,7 @@ class Http(FastAPI):
 		self.add_api_route("/callback", self.get_callback, methods=["GET"], summary="Get the callback URL", tags=["Callback"])
 		self.add_api_route("/callback", self.set_callback, methods=["POST"], summary="Set the callback URL", tags=["Callback"])
 
-	def _forward_msg(self, msg: WxMsg, cb: str):
+	def _forward_msg(self, msg: WxMsg):#, cb: str):
 		data = {}
 		data["id"] = msg.id
 		data["ts"] = msg.ts

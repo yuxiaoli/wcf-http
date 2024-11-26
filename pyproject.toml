@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "wcf-http-server"
-version = "39.0.14.0.1"
+version = "39.0.14.0.2"
 description = "一个玩微信的工具"
 authors = ["sean <sean.li@vectorindex.cloud>"]
 readme = "README.md"
