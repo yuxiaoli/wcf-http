@@ -17,10 +17,10 @@ python -m venv venv
 venv\Scripts\activate
 
 # 安装依赖
-pip install wcf-http-server==39.0.14.0.1
+pip install "wcf-http-server>=39.0.14.0,<39.0.14.1"
 
 # 安装额外依赖systray，服务器在任务栏可见
-pip install wcf-http-server[systray]==39.0.14.0.1
+pip install "wcf-http-server[systray]>=39.0.14.0,<39.0.14.1"
 ```
 
 ### 运行
