@@ -8,7 +8,7 @@ packages = [{include = "wcf_http", from = "src"}]
 
 [tool.poetry.dependencies]
 python = "^3.10"
-wcferry = "~39.2.4"
+wcferry = "~39.3.3"
 uvicorn = "^0.23.2"#"^0.32.0"
 fastapi = "^0.103.2"#"^0.115.5"
 pystray = { version = "^0.19.5", optional = true }
