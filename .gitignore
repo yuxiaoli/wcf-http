@@ -163,9 +163,10 @@ cython_debug/
 #configs/
 data/
 temp/
-scripts/
 .wcf.lock
 logs/
 .vs/
 *.bak
 *.lnk
+build/
+scripts/
