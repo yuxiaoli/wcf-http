@@ -34,7 +34,7 @@ python src\wcf_http\main.py -v
 python src\wcf_http\main.py -h
 
 usage: main.py [-h] [-v] [--wcf_host WCF_HOST] [--wcf_port WCF_PORT] [--wcf_debug WCF_DEBUG] [--host HOST]
-               [--port PORT] [--cb CB]
+               [--port PORT] [--cb CB] [--systray]
 
 options:
   -h, --help            show this help message and exit
@@ -46,6 +46,7 @@ options:
   --host HOST           wcfhttp 监听地址，默认监听 0.0.0.0
   --port PORT           wcfhttp 监听端口，默认 9999
   --cb CB               接收消息回调地址
+  --systray             enable system tray icon
 
 # 忽略新消息运行
 python src\wcf_http\main.py

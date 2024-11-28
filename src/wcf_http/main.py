@@ -20,6 +20,7 @@ def main():
     parse.add_argument("--host", type=str, default="0.0.0.0", help="wcfhttp 监听地址，默认监听 0.0.0.0")
     parse.add_argument("--port", type=int, default=9999, help="wcfhttp 监听端口，默认 9999")
     parse.add_argument("--cb", type=str, default="", help="接收消息回调地址")
+    parse.add_argument("--systray", action="store_true", help="enable system tray icon")  # Added tray option
 
     logging.basicConfig(level="INFO", format="%(asctime)s %(message)s")
     args = parse.parse_args()
@@ -55,10 +56,93 @@ def main():
 </table>"""
     http = Http(wcf=wcf,
                 cb=cb,
+                host=args.host.replace('0.0.0.0', '127.0.0.1'),
+                port=args.port,
                 title="WeChatFerry HTTP 客户端",
                 description=f"GitHub: <a href='{github}'>wcf-http</a> | PyPI: <a href='{pypi}'>wcf-http-server</a>{qrcodes}",)
 
-    uvicorn.run(app=http, host=args.host, port=args.port)
+    if args.systray:
+        # Attempt to import pystray and other necessary modules
+        try:
+            # Import necessary modules for the tray icon
+            import pystray
+            from pystray import MenuItem as item
+            from PIL import Image#, ImageDraw
+        except ImportError:
+            logging.warning("pystray or PIL is not installed. Running server without tray icon.")
+            # Run uvicorn server normally
+            uvicorn.run(app=http, host=args.host, port=args.port)
+            return
+
+        # Function to create an icon image
+        def create_image():
+            # Get the absolute path of the current file's directory
+            current_dir = os.path.dirname(os.path.abspath(__file__))
+            return Image.open(os.path.join(current_dir, "assets", "images", 'wcf-http.png'))
+
+        # Global variable to control the server
+        global uvicorn_server
+        uvicorn_server = None
+        exit_event = threading.Event()
+
+        # Function to run uvicorn server
+        def run_uvicorn():
+            global uvicorn_server
+            config = uvicorn.Config(app=http, host=args.host, port=args.port)
+            uvicorn_server = uvicorn.Server(config)
+            uvicorn_server.run()
+
+        # Start uvicorn server in a separate thread
+        server_thread = threading.Thread(target=run_uvicorn)
+        server_thread.start()
+
+        # Function to open the documentation webpage
+        def on_open(icon, item):
+            webbrowser.open(url)
+
+        # Function to exit the application
+        def on_exit(icon, item):
+            # Stop the uvicorn server
+            if uvicorn_server is not None:
+                uvicorn_server.should_exit = True
+            # Stop the tray icon
+            icon.stop()
+            # Signal the main thread to exit
+            exit_event.set()
+
+        # Create the tray icon and menu
+        icon_image = create_image()
+        menu = pystray.Menu(
+            item('Open API Docs', on_open),
+            item('Exit', on_exit)
+        )
+        icon = pystray.Icon("WeChatFerry", icon_image, "WeChatFerry", menu)
+
+        # Run the tray icon in a separate thread to avoid blocking
+        def run_tray_icon():
+            icon.run()
+
+        tray_thread = threading.Thread(target=run_tray_icon)
+        tray_thread.start()
+
+        # Wait for the exit event
+        try:
+            exit_event.wait()
+        except KeyboardInterrupt:
+            pass
+        finally:
+            # Ensure that the server and tray icon are stopped
+            if uvicorn_server is not None:
+                uvicorn_server.should_exit = True
+            if icon is not None:
+                icon.stop()
+            # Wait for threads to finish
+            server_thread.join()
+            tray_thread.join()
+
+    else:
+        # Run uvicorn server normally
+        uvicorn.run(app=http, host=args.host, port=args.port)
 
 
 if __name__ == "__main__":
