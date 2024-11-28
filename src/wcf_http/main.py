@@ -22,7 +22,7 @@ def main():
 	parse.add_argument("--host", type=str, default="0.0.0.0", help="wcfhttp 监听地址，默认监听 0.0.0.0")
 	parse.add_argument("--port", type=int, default=9999, help="wcfhttp 监听端口，默认 9999")
 	parse.add_argument("--cb", type=str, default="", help="接收消息回调地址")
-	parse.add_argument("--systray", action="store_true", help="Enable system tray icon")  # Added tray option
+	parse.add_argument("--systray", action="store_true", help="enable system tray icon")  # Added tray option
 
 	logging.basicConfig(level="INFO", format="%(asctime)s %(message)s")
 	args = parse.parse_args()

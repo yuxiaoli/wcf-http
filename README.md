@@ -46,7 +46,7 @@ options:
   --host HOST           wcfhttp 监听地址，默认监听 0.0.0.0
   --port PORT           wcfhttp 监听端口，默认 9999
   --cb CB               接收消息回调地址
-  --systray             Enable system tray icon
+  --systray             enable system tray icon
 
 # 忽略新消息运行
 wcfhttp
