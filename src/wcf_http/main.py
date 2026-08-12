@@ -11,7 +11,7 @@ import sys
 import uvicorn
 from wcferry import Wcf
 # from wcfhttp import Http, __version__
-from wcf_http.core import Http, __version__
+from core import Http, __version__
 
 def main():
 	parse = argparse.ArgumentParser()
